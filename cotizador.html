@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cotizador ₩ → $</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0e0e;
+  --surface: #161616;
+  --surface2: #1e1e1e;
+  --border: #2a2a2a;
+  --accent: #c8f060;
+  --accent2: #60d4f0;
+  --text: #f0ede6;
+  --muted: #666;
+  --muted2: #444;
+  --danger: #f06060;
+  --warn: #f0b460;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; min-height: 100vh; font-size: 14px; }
+
+header {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+}
+.logo { display: flex; align-items: baseline; gap: 10px; }
+.logo h1 { font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; }
+.logo h1 em { color: var(--accent); font-style: italic; }
+.logo span { font-size: 11px; color: var(--muted); }
+
+.rate-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.rate-chip {
+  font-size: 11px; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 6px 10px; display: flex; flex-direction: column; gap: 2px;
+}
+.rate-chip label { color: var(--muted); font-size: 10px; }
+.rate-chip input {
+  background: none; border: none; color: var(--text); font-family: 'DM Mono', monospace;
+  font-size: 13px; width: 90px; outline: none;
+}
+.rate-chip input:focus { color: var(--accent); }
+.rate-status { font-size: 10px; color: var(--muted); display: flex; align-items: center; gap: 5px; }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+.dot.loading { background: var(--warn); animation: blink 1s infinite; }
+.dot.error { background: var(--danger); }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+main { padding: 1.5rem 2rem; max-width: 980px; }
+
+.input-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 1.25rem; margin-bottom: 1.5rem;
+}
+.input-row { display: flex; gap: 8px; align-items: flex-end; flex-wrap: wrap; }
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.field input {
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
+  color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px;
+  padding: 8px 12px; outline: none; transition: border-color .15s;
+}
+.field input:focus { border-color: var(--accent); }
+.btn-add {
+  padding: 9px 20px; background: var(--accent); color: #0e0e0e;
+  border: none; border-radius: 6px; font-family: 'DM Mono', monospace;
+  font-size: 12px; font-weight: 500; cursor: pointer; transition: opacity .15s; white-space: nowrap;
+}
+.btn-add:hover { opacity: .85; }
+.hint { font-size: 11px; color: var(--muted); margin-top: 8px; }
+
+.section-title {
+  font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em;
+  margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+}
+.section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.empty-state {
+  color: var(--muted); font-size: 12px; text-align: center; padding: 2rem;
+  border: 1px dashed var(--border); border-radius: 8px;
+}
+
+.prod-block { margin-bottom: 1rem; }
+.prod-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px 8px 0 0;
+}
+.prod-header-name { flex: 1; font-size: 13px; }
+.prod-won { font-size: 11px; color: var(--muted); white-space: nowrap; }
+.badge-envio { font-size: 10px; color: var(--accent2); border: 1px solid var(--accent2); border-radius: 4px; padding: 2px 6px; white-space: nowrap; }
+.badge-libre { font-size: 10px; color: var(--muted); border: 1px solid var(--muted2); border-radius: 4px; padding: 2px 6px; white-space: nowrap; }
+.btn-toggle {
+  font-size: 10px; padding: 3px 8px; background: none; color: var(--muted);
+  border: 1px solid var(--muted2); border-radius: 4px; cursor: pointer;
+  font-family: 'DM Mono', monospace; transition: all .15s; white-space: nowrap;
+}
+.btn-toggle:hover { border-color: var(--accent2); color: var(--accent2); }
+.btn-del { background: none; border: none; color: var(--muted2); cursor: pointer; font-size: 18px; line-height: 1; transition: color .15s; padding: 0 2px; }
+.btn-del:hover { color: var(--danger); }
+
+.prices-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  border: 1px solid var(--border); border-top: none;
+  border-radius: 0 0 8px 8px; overflow: hidden;
+}
+.price-cell {
+  padding: 10px 12px; background: var(--surface2);
+  border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 3px;
+}
+.price-cell:last-child { border-right: none; }
+.price-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.price-mxn { font-size: 16px; }
+.price-note { font-size: 10px; color: var(--muted); }
+.price-cell.hl { background: #191f12; }
+.price-cell.hl .price-mxn { color: var(--accent); }
+
+.totals-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 1.25rem; margin-bottom: .75rem;
+}
+.totals-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 1rem; }
+.total-cell { display: flex; flex-direction: column; gap: 4px; }
+.total-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.total-val { font-size: 20px; }
+.total-val.accent { color: var(--accent); }
+
+.copy-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding-top: .75rem; border-top: 1px solid var(--border); }
+.btn-copy {
+  padding: 7px 14px; background: none; color: var(--text);
+  border: 1px solid var(--border); border-radius: 6px;
+  font-family: 'DM Mono', monospace; font-size: 11px; cursor: pointer; transition: all .15s;
+}
+.btn-copy:hover { border-color: var(--accent); color: var(--accent); }
+.btn-danger { border-color: var(--muted2); color: var(--muted); }
+.btn-danger:hover { border-color: var(--danger); color: var(--danger); }
+.copy-feedback { font-size: 11px; color: var(--accent); }
+
+@media (max-width: 700px) {
+  main { padding: 1rem; }
+  header { padding: 1rem; flex-direction: column; align-items: flex-start; }
+  .prices-grid { grid-template-columns: repeat(2, 1fr); }
+  .price-cell { border-bottom: 1px solid var(--border); }
+  .totals-grid { grid-template-columns: repeat(2, 1fr); }
+  .input-row { flex-direction: column; }
+  .field input { width: 100% !important; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <h1>cotiza<em>₩</em></h1>
+    <span>uso personal · 100% gratis</span>
+  </div>
+  <div class="rate-bar">
+    <div class="rate-status">
+      <span class="dot loading" id="rdot"></span>
+      <span id="rstatus">obteniendo cambio...</span>
+    </div>
+    <div class="rate-chip">
+      <label>KRW → MXN (1 ₩ = ?$)</label>
+      <input type="number" id="rate" value="0.01100" step="0.00001" min="0.00001">
+    </div>
+    <div class="rate-chip">
+      <label>Spread tarjeta %</label>
+      <input type="number" id="spread" value="3" step="0.5" min="0" max="20" style="width:50px">
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="input-card">
+    <div class="input-row">
+      <div class="field">
+        <label>nombre del producto</label>
+        <input type="text" id="inp-nombre" placeholder="Ej: Tshirt azul" style="width:220px">
+      </div>
+      <div class="field">
+        <label>precio en ₩</label>
+        <input type="number" id="inp-won" placeholder="59000" step="500" min="0" style="width:140px">
+      </div>
+      <button class="btn-add" onclick="agregar()">+ agregar</button>
+    </div>
+    <p class="hint">Los productos menores a ₩50,000 reciben +₩3,000 de envío automáticamente. Puedes quitarlo por producto.</p>
+  </div>
+
+  <div class="section-title">productos</div>
+  <div id="prod-list"><div class="empty-state">Agrega productos para ver los precios</div></div>
+
+  <div id="totals-wrap" style="display:none">
+    <div class="section-title" style="margin-top:1.5rem">totales</div>
+    <div class="totals-card">
+      <div class="totals-grid">
+        <div class="total-cell"><span class="total-label">×0.015</span><span class="total-val" id="tot-0">—</span></div>
+        <div class="total-cell"><span class="total-label">cambio del día</span><span class="total-val" id="tot-1">—</span></div>
+        <div class="total-cell"><span class="total-label">nu / banamex</span><span class="total-val" id="tot-2">—</span></div>
+        <div class="total-cell"><span class="total-label">wise + 7%</span><span class="total-val" id="tot-3">—</span></div>
+        <div class="total-cell"><span class="total-label">sin envío</span><span class="total-val accent" id="tot-4">—</span></div>
+      </div>
+      <div class="copy-bar">
+        <button class="btn-copy" onclick="copiarTexto()">📋 copiar resumen</button>
+        <button class="btn-copy" onclick="copiarTabla()">📋 copiar tabla (Excel/Sheets)</button>
+        <button class="btn-copy btn-danger" onclick="limpiar()">✕ limpiar todo</button>
+        <span class="copy-feedback" id="copy-fb"></span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+let productos = [];
+let rate = 0.01100;
+
+async function fetchRate() {
+  try {
+    const res = await fetch('https://open.er-api.com/v6/latest/KRW');
+    const data = await res.json();
+    if (data.rates && data.rates.MXN) {
+      rate = data.rates.MXN;
+      document.getElementById('rate').value = rate.toFixed(5);
+      document.getElementById('rdot').className = 'dot';
+      document.getElementById('rstatus').textContent = 'cambio actualizado hoy';
+    } else throw new Error();
+  } catch {
+    document.getElementById('rdot').className = 'dot error';
+    document.getElementById('rstatus').textContent = 'edita el cambio manualmente';
+  }
+}
+
+document.getElementById('rate').addEventListener('input', function() { rate = parseFloat(this.value) || rate; render(); });
+document.getElementById('spread').addEventListener('input', render);
+
+function getRate() { return parseFloat(document.getElementById('rate').value) || rate; }
+function getSpread() { return (parseFloat(document.getElementById('spread').value) || 3) / 100; }
+
+function calc(won, envio) {
+  const r = getRate(), sp = getSpread();
+  const wonT = won + (envio ? 3000 : 0);
+  return {
+    formula: wonT * 0.015,
+    dia:     wonT * r,
+    card:    wonT * r * (1 + sp),
+    wise:    wonT * r * 1.07,
+    directo: won * r,
+    wonT
+  };
+}
+
+function fmt(n) { return '$' + Math.round(n).toLocaleString('es-MX'); }
+
+function agregar() {
+  const nombre = document.getElementById('inp-nombre').value.trim() || 'Producto';
+  const won = parseInt(document.getElementById('inp-won').value);
+  if (!won || won <= 0) { document.getElementById('inp-won').focus(); return; }
+  productos.push({ nombre, won, envio: won < 50000 });
+  document.getElementById('inp-nombre').value = '';
+  document.getElementById('inp-won').value = '';
+  document.getElementById('inp-nombre').focus();
+  render();
+}
+
+document.getElementById('inp-won').addEventListener('keydown', e => { if (e.key === 'Enter') agregar(); });
+document.getElementById('inp-nombre').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('inp-won').focus(); });
+
+function toggleEnvio(i) { productos[i].envio = !productos[i].envio; render(); }
+function eliminar(i) { productos.splice(i, 1); render(); }
+function limpiar() { if (confirm('¿Limpiar todos los productos?')) { productos = []; render(); } }
+
+function render() {
+  const list = document.getElementById('prod-list');
+  const wrap = document.getElementById('totals-wrap');
+  const sp = document.getElementById('spread').value;
+
+  if (productos.length === 0) {
+    list.innerHTML = '<div class="empty-state">Agrega productos para ver los precios</div>';
+    wrap.style.display = 'none';
+    return;
+  }
+
+  list.innerHTML = '';
+  let sums = [0, 0, 0, 0, 0];
+
+  productos.forEach((p, i) => {
+    const c = calc(p.won, p.envio);
+    sums[0] += c.formula; sums[1] += c.dia; sums[2] += c.card; sums[3] += c.wise; sums[4] += c.directo;
+
+    const esBarato = p.won < 50000;
+    const badgeHTML = esBarato
+      ? (p.envio
+          ? '<span class="badge-envio">+₩3,000 envío</span>'
+          : '<span class="badge-libre">envío omitido</span>')
+      : '<span class="badge-libre">envío gratis ₩</span>';
+
+    const toggleHTML = esBarato
+      ? `<button class="btn-toggle" onclick="toggleEnvio(${i})">${p.envio ? '− quitar envío' : '+ agregar envío'}</button>`
+      : '';
+
+    const block = document.createElement('div');
+    block.className = 'prod-block';
+    block.innerHTML = `
+      <div class="prod-header">
+        <span class="prod-header-name">${p.nombre}</span>
+        <span class="prod-won">₩${p.won.toLocaleString()}</span>
+        ${badgeHTML}
+        ${toggleHTML}
+        <button class="btn-del" onclick="eliminar(${i})">×</button>
+      </div>
+      <div class="prices-grid">
+        <div class="price-cell">
+          <span class="price-label">×0.015</span>
+          <span class="price-mxn">${fmt(c.formula)}</span>
+          <span class="price-note">₩${c.wonT.toLocaleString()} × 0.015</span>
+        </div>
+        <div class="price-cell">
+          <span class="price-label">cambio del día</span>
+          <span class="price-mxn">${fmt(c.dia)}</span>
+          <span class="price-note">sin comisión</span>
+        </div>
+        <div class="price-cell">
+          <span class="price-label">nu / banamex</span>
+          <span class="price-mxn">${fmt(c.card)}</span>
+          <span class="price-note">+${sp}% spread</span>
+        </div>
+        <div class="price-cell">
+          <span class="price-label">wise + 7%</span>
+          <span class="price-mxn">${fmt(c.wise)}</span>
+          <span class="price-note">comisión app</span>
+        </div>
+        <div class="price-cell hl">
+          <span class="price-label">sin envío</span>
+          <span class="price-mxn">${fmt(c.directo)}</span>
+          <span class="price-note">₩${p.won.toLocaleString()} base</span>
+        </div>
+      </div>
+    `;
+    list.appendChild(block);
+  });
+
+  wrap.style.display = 'block';
+  ['tot-0','tot-1','tot-2','tot-3','tot-4'].forEach((id, i) => {
+    document.getElementById(id).textContent = fmt(sums[i]);
+  });
+}
+
+function mostrarFeedback(msg) {
+  const fb = document.getElementById('copy-fb');
+  fb.textContent = msg;
+  setTimeout(() => fb.textContent = '', 2500);
+}
+
+function copiarTexto() {
+  if (!productos.length) return;
+  const r = getRate(), sp = document.getElementById('spread').value;
+  let txt = `COTIZACIÓN ₩ → MXN\nCambio: 1 ₩ = $${r.toFixed(5)} MXN · Spread tarjeta: ${sp}%\n${'─'.repeat(40)}\n\n`;
+  productos.forEach(p => {
+    const c = calc(p.won, p.envio);
+    txt += `▸ ${p.nombre}  ₩${p.won.toLocaleString()}${p.envio ? ' (+₩3,000 envío)' : ''}\n`;
+    txt += `  ×0.015        ${fmt(c.formula)}\n`;
+    txt += `  Cambio día    ${fmt(c.dia)}\n`;
+    txt += `  Nu/Banamex    ${fmt(c.card)}\n`;
+    txt += `  Wise +7%      ${fmt(c.wise)}\n`;
+    txt += `  Sin envío     ${fmt(c.directo)}\n\n`;
+  });
+  navigator.clipboard.writeText(txt).then(() => mostrarFeedback('✓ resumen copiado'));
+}
+
+function copiarTabla() {
+  if (!productos.length) return;
+  let txt = `Producto\t₩ precio\tEnvío\t×0.015\tCambio día\tNu/Banamex\tWise+7%\tSin envío\n`;
+  productos.forEach(p => {
+    const c = calc(p.won, p.envio);
+    txt += `${p.nombre}\t${p.won}\t${p.envio?'₩3,000':'—'}\t${fmt(c.formula)}\t${fmt(c.dia)}\t${fmt(c.card)}\t${fmt(c.wise)}\t${fmt(c.directo)}\n`;
+  });
+  navigator.clipboard.writeText(txt).then(() => mostrarFeedback('✓ tabla copiada — pégala en Excel o Sheets'));
+}
+
+fetchRate();
+render();
+</script>
+</body>
+</html>
