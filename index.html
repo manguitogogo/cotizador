@@ -177,6 +177,10 @@ main { padding: 1rem 1rem 5rem; }
       <input type="number" id="rate-kr" value="0.01100" step="0.00001" min="0.00001" inputmode="decimal">
     </div>
     <div class="rate-pill">
+      <label>Envío Corea ₩</label>
+      <input type="number" id="envio-kr" value="3000" step="500" min="0" inputmode="numeric">
+    </div>
+    <div class="rate-pill">
       <label>Spread tarjeta %</label>
       <input type="number" id="spread" value="3" step="0.5" min="0" max="20" inputmode="decimal">
     </div>
@@ -218,7 +222,7 @@ main { padding: 1rem 1rem 5rem; }
       <input type="number" id="kr-won" placeholder="59000" step="500" min="0" inputmode="numeric">
     </div>
     <button class="btn-agregar btn-kr" onclick="agregarKR()">+ agregar producto</button>
-    <p class="hint-text">productos &lt; ₩50,000 llevan +₩3,000 de envío automáticamente</p>
+    <p class="hint-text">productos &lt; ₩50,000 llevan el costo de envío automáticamente</p>
   </div>
 
   <!-- INPUT JAPÓN -->
@@ -305,12 +309,13 @@ function setMode(m) {
   render();
 }
 
-['rate-kr','rate-jp','rate-mc','spread','spread-jp','comision-mc'].forEach(id => {
+['rate-kr','rate-jp','rate-mc','envio-kr','spread','spread-jp','comision-mc'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('input', render);
 });
 
 function getRateKR() { return parseFloat(document.getElementById('rate-kr').value) || rateKR; }
+function getEnvioKR() { return parseFloat(document.getElementById('envio-kr').value) || 0; }
 function getRateJP() { return parseFloat(document.getElementById('rate-jp').value) || rateJP; }
 function getSpreadKR() { return (parseFloat(document.getElementById('spread').value) || 3) / 100; }
 function getSpreadJP() { return (parseFloat(document.getElementById('spread-jp').value) || 3) / 100; }
@@ -320,8 +325,9 @@ function fmt(n) { return '$' + Math.round(n).toLocaleString('es-MX'); }
 
 function calcKR(won, envio) {
   const r = getRateKR(), sp = getSpreadKR();
-  const wonT = won + (envio ? 3000 : 0);
-  return { formula: wonT * 0.015, dia: wonT * r, card: wonT * r * (1 + sp), wise: wonT * r * 1.07, directo: won * r, wonT };
+  const envioAmt = getEnvioKR();
+  const wonT = won + (envio ? envioAmt : 0);
+  return { formula: wonT * 0.015, dia: wonT * r, card: wonT * r * (1 + sp), wise: wonT * r * 1.07, directo: won * r, wonT, envioAmt };
 }
 
 function calcJP(yen) {
@@ -408,7 +414,7 @@ function render() {
       const c = calcKR(p.precio, p.envio);
       const esBarato = p.precio < 50000;
       const badgeHTML = esBarato
-        ? (p.envio ? '<span class="badge badge-envio">+₩3,000 envío</span>' : '<span class="badge badge-omitido">sin envío</span>')
+        ? (p.envio ? `<span class="badge badge-envio">+₩${c.envioAmt.toLocaleString()} envío</span>` : '<span class="badge badge-omitido">sin envío</span>')
         : '<span class="badge badge-gratis">envío gratis</span>';
       const togHTML = esBarato ? `<button class="btn-toggle-envio" onclick="toggleEnvio(${gi})">${p.envio?'− quitar':'+ envío'}</button>` : '';
       headExtra = `<span class="prod-price-raw">₩${p.precio.toLocaleString()}</span>${badgeHTML}${togHTML}`;
@@ -519,7 +525,7 @@ function copiarTexto() {
   visible.forEach(p => {
     if (p.tipo === 'kr') {
       const c = calcKR(p.precio, p.envio);
-      txt += `▸ ${p.nombre}  ₩${p.precio.toLocaleString()}${p.envio?' (+₩3,000 envío)':''}\n`;
+      txt += `▸ ${p.nombre}  ₩${p.precio.toLocaleString()}${p.envio?' (+₩'+c.envioAmt.toLocaleString()+' envío)':''}\n`;
       txt += `  ×0.015      ${fmt(c.formula)}\n  Cambio día  ${fmt(c.dia)}\n  Nu/Banamex  ${fmt(c.card)}\n  Wise +7%    ${fmt(c.wise)}\n  Sin envío   ${fmt(c.directo)}\n\n`;
     } else if (p.tipo === 'jp') {
       const c = calcJP(p.precio);
@@ -539,7 +545,7 @@ function copiarTabla() {
   let txt = '';
   if (modo === 'kr') {
     txt = 'Producto\t₩\tEnvío\t×0.015\tCambio día\tNu/Banamex\tWise+7%\tSin envío\n';
-    visible.forEach(p => { const c = calcKR(p.precio, p.envio); txt += `${p.nombre}\t${p.precio}\t${p.envio?'₩3,000':'—'}\t${fmt(c.formula)}\t${fmt(c.dia)}\t${fmt(c.card)}\t${fmt(c.wise)}\t${fmt(c.directo)}\n`; });
+    visible.forEach(p => { const c = calcKR(p.precio, p.envio); txt += `${p.nombre}\t${p.precio}\t${p.envio?'₩'+c.envioAmt.toLocaleString():'—'}\t${fmt(c.formula)}\t${fmt(c.dia)}\t${fmt(c.card)}\t${fmt(c.wise)}\t${fmt(c.directo)}\n`; });
   } else if (modo === 'jp') {
     txt = 'Producto\t¥\t×0.13\tCambio día\tNu/Banamex\tWise+7%\n';
     visible.forEach(p => { const c = calcJP(p.precio); txt += `${p.nombre}\t${p.precio}\t${fmt(c.formula)}\t${fmt(c.dia)}\t${fmt(c.card)}\t${fmt(c.wise)}\n`; });
