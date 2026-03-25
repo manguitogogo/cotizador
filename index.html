@@ -108,6 +108,11 @@ tbody td { padding: 6px 10px; vertical-align: middle; }
 .com-tog.on::after { left: 14px; }
 
 /* BTN DEL */
+/* EDICION INLINE */
+.td-edit { background: none; border: none; border-bottom: 1.5px solid transparent; font-family: 'DM Sans', sans-serif; color: var(--text); outline: none; transition: border-color .2s; padding: 1px 2px; }
+.td-edit:focus { border-color: var(--lav2); }
+.td-edit-nombre { font-weight: 500; font-size: 12px; min-width: 80px; max-width: 140px; }
+.td-edit-precio { font-size: 12px; color: var(--muted); width: 75px; }
 .btn-del { background: none; border: none; color: var(--muted2); font-size: 16px; cursor: pointer; padding: 0 2px; transition: color .15s; line-height: 1; }
 .btn-del:hover { color: var(--danger); }
 
@@ -164,13 +169,15 @@ tbody td { padding: 6px 10px; vertical-align: middle; }
   </div>
   <div class="rates-row" id="rates-kr">
     <div class="rate-pill"><label>1 ₩ = ? $ MXN</label><input type="number" id="rate-kr" value="0.01100" step="0.00001" min="0.00001" inputmode="decimal"></div>
+    <div class="rate-pill"><label>1 USD = ? $ MXN</label><input type="number" id="usd-mxn" value="17.50" step="0.01" min="1" inputmode="decimal"></div>
     <div class="rate-pill"><label>Spread tarjeta %</label><input type="number" id="spread-kr" value="3" step="0.5" min="0" max="20" inputmode="decimal"></div>
-    <div class="rate-pill"><label>Comisión Wise %</label><input type="number" id="wise-kr" value="7" step="0.5" min="0" max="30" inputmode="decimal"></div>
+    <div class="rate-pill"><label>Wise + banco %</label><input type="number" id="wise-kr" value="6" step="0.5" min="0" max="30" inputmode="decimal"></div>
   </div>
   <div class="rates-row" id="rates-jp" style="display:none">
     <div class="rate-pill"><label>1 ¥ = ? $ MXN</label><input type="number" id="rate-jp" value="0.09500" step="0.00001" min="0.00001" inputmode="decimal"></div>
+    <div class="rate-pill"><label>1 USD = ? $ MXN</label><input type="number" id="usd-mxn-jp" value="17.50" step="0.01" min="1" inputmode="decimal"></div>
     <div class="rate-pill"><label>Spread tarjeta %</label><input type="number" id="spread-jp" value="3" step="0.5" min="0" max="20" inputmode="decimal"></div>
-    <div class="rate-pill"><label>Comisión Wise %</label><input type="number" id="wise-jp" value="7" step="0.5" min="0" max="30" inputmode="decimal"></div>
+    <div class="rate-pill"><label>Wise + banco %</label><input type="number" id="wise-jp" value="6" step="0.5" min="0" max="30" inputmode="decimal"></div>
   </div>
   <div class="rates-row" id="rates-mc" style="display:none">
     <div class="rate-pill" style="background:var(--merc2)"><label>Tipo de cambio ¥</label><input type="number" id="rate-mc" value="0.125" step="0.001" min="0.001" inputmode="decimal"></div>
@@ -265,6 +272,11 @@ async function fetchRates() {
     if (data.rates) {
       if (data.rates.KRW) { rateKR = 1/data.rates.KRW; document.getElementById('rate-kr').value = rateKR.toFixed(5); }
       if (data.rates.JPY) { rateJP = 1/data.rates.JPY; document.getElementById('rate-jp').value = rateJP.toFixed(5); }
+      if (data.rates.USD) {
+        const usdMxn = (1/data.rates.USD).toFixed(2);
+        document.getElementById('usd-mxn').value = usdMxn;
+        document.getElementById('usd-mxn-jp').value = usdMxn;
+      }
       document.getElementById('rdot').className = 'rdot';
       document.getElementById('rstatus').textContent = 'cambio actualizado';
     } else throw 0;
@@ -274,7 +286,7 @@ async function fetchRates() {
   }
 }
 
-['rate-kr','rate-jp','rate-mc','spread-kr','spread-jp','wise-kr','wise-jp','comision-mc'].forEach(id => {
+['rate-kr','rate-jp','rate-mc','usd-mxn','usd-mxn-jp','spread-kr','spread-jp','wise-kr','wise-jp','comision-mc'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('input', render);
 });
@@ -340,6 +352,17 @@ function setEnvio(i, val) {
   productos[i].envio = parseFloat(val) || 0;
   render();
 }
+function setNombre(i, val) {
+  if (!val.trim()) return;
+  productos[i].nombre = val.trim();
+}
+function setPrecio(i, val) {
+  const v = parseInt(val);
+  if (!v || v <= 0) { eliminar(i); return; }
+  productos[i].precio = v;
+  if (productos[i].tipo === 'kr') { productos[i].envio = v < 50000 ? 3000 : 0; productos[i].envioOn = v < 50000; }
+  render();
+}
 function toggleWise(i) {
   productos[i].wiseOn = !productos[i].wiseOn;
   render();
@@ -379,8 +402,8 @@ function render() {
       sums.formula += c.formula; sums.dia += c.dia; sums.card += c.card;
       if(p.wiseOn) sums.wise += c.wise;
       tr.innerHTML = `
-        <td class="td-nombre">${p.nombre}</td>
-        <td class="td-precio">₩${p.precio.toLocaleString()}</td>
+        <td><input class="td-edit td-edit-nombre" value="${p.nombre}" onblur="setNombre(${gi},this.value)" onkeydown="if(event.key==='Enter')this.blur()"></td>
+        <td><input class="td-edit td-edit-precio" type="number" value="${p.precio}" step="500" min="0" onblur="setPrecio(${gi},this.value)" onkeydown="if(event.key==='Enter')this.blur()"></td>
         <td>
           <div class="envio-cell">
             <button class="tog${p.envioOn?' on':''}" onclick="toggleEnvio(${gi})"></button>
@@ -401,8 +424,8 @@ function render() {
       sums.formula += c.formula; sums.dia += c.dia; sums.card += c.card;
       if(p.wiseOn) sums.wise += c.wise;
       tr.innerHTML = `
-        <td class="td-nombre">${p.nombre}</td>
-        <td class="td-precio">¥${p.precio.toLocaleString()}</td>
+        <td><input class="td-edit td-edit-nombre" value="${p.nombre}" onblur="setNombre(${gi},this.value)" onkeydown="if(event.key==='Enter')this.blur()"></td>
+        <td><input class="td-edit td-edit-precio" type="number" value="${p.precio}" step="100" min="0" onblur="setPrecio(${gi},this.value)" onkeydown="if(event.key==='Enter')this.blur()"></td>
         <td>
           <div class="envio-cell">
             <button class="tog${p.envioOn?' on':''}" onclick="toggleEnvio(${gi})"></button>
@@ -421,8 +444,8 @@ function render() {
       const c = calcMC(p.precio);
       sums.mc += c.result;
       tr.innerHTML = `
-        <td class="td-nombre">${p.nombre}</td>
-        <td class="td-precio">¥${p.precio.toLocaleString()}</td>
+        <td><input class="td-edit td-edit-nombre" value="${p.nombre}" onblur="setNombre(${gi},this.value)" onkeydown="if(event.key==='Enter')this.blur()"></td>
+        <td><input class="td-edit td-edit-precio" type="number" value="${p.precio}" step="100" min="0" onblur="setPrecio(${gi},this.value)" onkeydown="if(event.key==='Enter')this.blur()"></td>
         <td colspan="2" style="font-size:10px;color:var(--muted)">(¥${p.precio}+350)×1.04×${getRateMC()}+$${getComMC()}</td>
         <td class="td-price rose" colspan="4">${fmt(c.result)}</td>
         <td><button class="btn-del" onclick="eliminar(${gi})">×</button></td>`;
