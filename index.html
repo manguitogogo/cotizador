@@ -393,7 +393,7 @@ function render() {
   totWrap.style.display = 'block';
 
   tbody.innerHTML = '';
-  let sums = { formula:0, dia:0, card:0, wise:0, mc:0 };
+  let sums = { formula:0, dia:0, card:0, wise:0, mc:0, won:0, yen:0 };
 
   visible.forEach(p => {
     const gi = productos.indexOf(p);
@@ -404,6 +404,7 @@ function render() {
       const c = calcKR(p.precio, envioAmt);
       sums.formula += c.formula; sums.dia += c.dia; sums.card += c.card;
       if(p.wiseOn) sums.wise += c.wise;
+      sums.won += p.precio + (p.envioOn ? p.envio : 0);
       tr.innerHTML = `
         <td><input class="td-edit td-edit-nombre" value="${p.nombre}" onblur="setNombre(${gi},this.value)" onkeydown="if(event.key==='Enter')this.blur()"></td>
         <td><input class="td-edit td-edit-precio" type="number" value="${p.precio}" step="500" min="0" onblur="setPrecio(${gi},this.value)" onkeydown="if(event.key==='Enter')this.blur()"></td>
@@ -426,6 +427,7 @@ function render() {
       const c = calcJP(p.precio, envioAmt);
       sums.formula += c.formula; sums.dia += c.dia; sums.card += c.card;
       if(p.wiseOn) sums.wise += c.wise;
+      sums.yen += p.precio + (p.envioOn ? p.envio : 0);
       tr.innerHTML = `
         <td><input class="td-edit td-edit-nombre" value="${p.nombre}" onblur="setNombre(${gi},this.value)" onkeydown="if(event.key==='Enter')this.blur()"></td>
         <td><input class="td-edit td-edit-precio" type="number" value="${p.precio}" step="100" min="0" onblur="setPrecio(${gi},this.value)" onkeydown="if(event.key==='Enter')this.blur()"></td>
@@ -463,9 +465,12 @@ function render() {
     tg.style.gridTemplateColumns = '1fr';
     tg.innerHTML = `<div class="tot-cell hl-merc"><span class="tot-lbl">total mercari</span><span class="tot-val">${fmt(sums.mc)}</span></div>`;
   } else {
-    tg.style.gridTemplateColumns = 'repeat(4,1fr)';
+    tg.style.gridTemplateColumns = 'repeat(5,1fr)';
     const lbl = modo==='kr'?'×0.015':'×0.13';
+    const totalMoneda = modo==='kr' ? sums.won : sums.yen;
+    const simMoneda = modo==='kr' ? '₩' : '¥';
     tg.innerHTML = `
+      <div class="tot-cell hl-rose"><span class="tot-lbl">total ${simMoneda}</span><span class="tot-val" style="font-size:16px">${simMoneda}${totalMoneda.toLocaleString('es-MX')}</span></div>
       <div class="tot-cell"><span class="tot-lbl">${lbl}</span><span class="tot-val">${fmt(sums.formula)}</span></div>
       <div class="tot-cell ${modo==='jp'?'hl-jpn':''}"><span class="tot-lbl">cambio día</span><span class="tot-val">${fmt(sums.dia)}</span></div>
       <div class="tot-cell"><span class="tot-lbl">nu / banamex</span><span class="tot-val">${fmt(sums.card)}</span></div>
