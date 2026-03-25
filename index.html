@@ -7,37 +7,37 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:      #f5f0fa;
-  --bg2:     #ede8f8;
-  --bg3:     #fdf8ff;
-  --lav:     #c0a8e8;
-  --lav2:    #a080d0;
-  --lav3:    #7050a0;
-  --rose:    #e880a8;
-  --rose2:   #f0c0d8;
-  --rose3:   #fce8f2;
-  --jpn:     #80b8e8;
-  --jpn2:    #e8f4fc;
-  --jpn3:    #3070a0;
-  --merc:    #e8a040;
-  --merc2:   #fdf2e0;
-  --merc3:   #a06010;
-  --text:    #3a2060;
-  --muted:   #9070b0;
-  --muted2:  #c8b0e0;
-  --border:  #ddd0f0;
-  --white:   #ffffff;
-  --danger:  #e06080;
-  --success: #70b090;
-  --warn:    #e0a060;
+  --bg:     #f5f0fa;
+  --bg2:    #ede8f8;
+  --bg3:    #fdf8ff;
+  --lav:    #c0a8e8;
+  --lav2:   #a080d0;
+  --lav3:   #7050a0;
+  --rose:   #e880a8;
+  --rose2:  #f0c0d8;
+  --rose3:  #fce8f2;
+  --jpn:    #80b8e8;
+  --jpn2:   #e8f4fc;
+  --jpn3:   #3070a0;
+  --merc:   #e8a040;
+  --merc2:  #fdf2e0;
+  --merc3:  #a06010;
+  --text:   #3a2060;
+  --muted:  #9070b0;
+  --muted2: #c8b0e0;
+  --border: #ddd0f0;
+  --white:  #ffffff;
+  --danger: #e06080;
+  --success:#70b090;
+  --warn:   #e0a060;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; max-width: 480px; margin: 0 auto; }
+body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
 
-/* ── HEADER ── */
-header { background: var(--white); border-bottom: 1px solid var(--border); padding: 1rem 1.25rem .75rem; position: sticky; top: 0; z-index: 10; }
-.header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: .75rem; }
-.app-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--lav3); }
+/* HEADER */
+header { background: var(--white); border-bottom: 1px solid var(--border); padding: .9rem 1.25rem .7rem; position: sticky; top: 0; z-index: 20; }
+.header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: .6rem; }
+.app-title { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--lav3); }
 .app-title em { color: var(--rose); font-style: italic; }
 .rate-badge { display: flex; align-items: center; gap: 5px; background: var(--bg2); border-radius: 999px; padding: 4px 10px; font-size: 11px; color: var(--muted); }
 .rdot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); flex-shrink: 0; }
@@ -45,113 +45,109 @@ header { background: var(--white); border-bottom: 1px solid var(--border); paddi
 .rdot.error { background: var(--danger); }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
 
-/* ── MODE SWITCHER ── */
-.switcher { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: .75rem; background: var(--bg2); border-radius: 14px; padding: 4px; }
-.sw-btn {
-  padding: 8px 4px; border: none; border-radius: 10px; background: none;
-  font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
-  color: var(--muted); cursor: pointer; transition: all .2s; text-align: center;
-}
-.sw-btn.active-kr { background: var(--white); color: var(--lav3); box-shadow: 0 1px 4px rgba(160,128,208,.2); }
-.sw-btn.active-jp { background: var(--white); color: var(--jpn3); box-shadow: 0 1px 4px rgba(80,160,200,.2); }
-.sw-btn.active-mc { background: var(--white); color: var(--merc3); box-shadow: 0 1px 4px rgba(200,128,32,.2); }
+.switcher { display: grid; grid-template-columns: repeat(3,1fr); gap: 4px; margin-bottom: .65rem; background: var(--bg2); border-radius: 12px; padding: 3px; }
+.sw-btn { padding: 7px 4px; border: none; border-radius: 9px; background: none; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; color: var(--muted); cursor: pointer; transition: all .2s; text-align: center; }
+.sw-btn.active-kr { background: var(--white); color: var(--lav3); }
+.sw-btn.active-jp { background: var(--white); color: var(--jpn3); }
+.sw-btn.active-mc { background: var(--white); color: var(--merc3); }
 
-/* ── RATES ROW ── */
-.rates-row { display: flex; gap: 8px; }
-.rate-pill { flex: 1; background: var(--bg2); border-radius: 10px; padding: 6px 10px; display: flex; flex-direction: column; gap: 1px; }
-.rate-pill label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
-.rate-pill input { background: none; border: none; outline: none; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--text); width: 100%; }
+.rates-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.rate-pill { flex: 1; min-width: 80px; background: var(--bg2); border-radius: 9px; padding: 5px 9px; display: flex; flex-direction: column; gap: 1px; }
+.rate-pill label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.rate-pill input { background: none; border: none; outline: none; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; color: var(--text); width: 100%; }
 
-/* ── MAIN ── */
-main { padding: 1rem 1rem 5rem; }
+/* MAIN */
+main { padding: .85rem 1rem 4rem; max-width: 900px; margin: 0 auto; }
 
-/* ── INPUT CARD ── */
-.input-card { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 1.1rem; margin-bottom: 1rem; }
-.card-title { font-size: 10px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: .75rem; }
-.field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; }
-.field label { font-size: 11px; color: var(--muted); }
-.field input {
-  background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px;
-  padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 15px;
-  color: var(--text); outline: none; transition: border-color .2s; width: 100%;
-}
-.field input:focus { border-color: var(--lav2); background: var(--white); }
-.field input::placeholder { color: var(--muted2); }
-.field input.jp-focus:focus { border-color: var(--jpn); }
-.field input.mc-focus:focus { border-color: var(--merc); }
+/* INPUT ROW */
+.add-bar { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: .85rem; margin-bottom: .85rem; display: flex; gap: 6px; align-items: flex-end; flex-wrap: wrap; }
+.add-field { display: flex; flex-direction: column; gap: 3px; }
+.add-field label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.add-field input { background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; padding: 8px 11px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); outline: none; transition: border-color .2s; }
+.add-field input:focus { border-color: var(--lav2); background: var(--white); }
+.add-field input::placeholder { color: var(--muted2); }
+.inp-nombre { width: 180px; }
+.inp-precio { width: 120px; }
+.btn-add { padding: 9px 18px; background: var(--lav2); color: var(--white); border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: opacity .2s; white-space: nowrap; align-self: flex-end; }
+.btn-add:hover { opacity: .85; }
+.btn-add.jp { background: var(--jpn); }
+.btn-add.mc { background: var(--merc); }
 
-.btn-agregar {
-  width: 100%; margin-top: 4px; color: var(--white); border: none; border-radius: 14px;
-  padding: 13px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
-  cursor: pointer; transition: opacity .2s;
-}
-.btn-kr { background: linear-gradient(135deg, var(--lav2), var(--rose)); }
-.btn-jp { background: linear-gradient(135deg, var(--jpn), #5090c0); }
-.btn-mc { background: linear-gradient(135deg, var(--merc), #c07820); }
-.btn-agregar:hover { opacity: .88; }
+/* TABLA WRAPPER con scroll horizontal en móvil */
+.table-wrap { background: var(--white); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: .85rem; }
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
-.hint-text { font-size: 11px; color: var(--muted2); margin-top: 6px; text-align: center; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 580px; }
+thead th { background: var(--bg2); color: var(--muted); font-size: 9px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; padding: 7px 10px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+thead th.th-price { text-align: right; }
+tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--bg3); }
+tbody td { padding: 6px 10px; vertical-align: middle; }
 
-/* ── INFO BOX MERCARI ── */
-.info-box { background: var(--merc2); border: 1px solid #f0d0a0; border-radius: 12px; padding: 10px 14px; margin-bottom: 8px; }
-.info-box p { font-size: 12px; color: var(--merc3); line-height: 1.5; }
-.info-box code { font-family: monospace; font-size: 11px; background: rgba(0,0,0,.06); padding: 1px 4px; border-radius: 4px; }
+.td-nombre { font-weight: 500; color: var(--text); min-width: 100px; }
+.td-precio { color: var(--muted); white-space: nowrap; }
+.td-price { text-align: right; font-weight: 500; color: var(--text); white-space: nowrap; }
+.td-price.rose { color: var(--rose); }
+.td-price.lav  { color: var(--lav2); }
 
-/* ── SECTION LABEL ── */
-.section-label { font-size: 10px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; display: flex; align-items: center; gap: 8px; margin: 1.25rem 0 .6rem; }
-.section-label::after { content:''; flex:1; height:1px; background: var(--border); }
+/* ENVÍO TOGGLE + INPUT en celda */
+.envio-cell { display: flex; align-items: center; gap: 5px; }
+.tog { width: 28px; height: 16px; border-radius: 999px; border: none; cursor: pointer; position: relative; flex-shrink: 0; transition: background .2s; background: var(--border); }
+.tog.on { background: var(--rose); }
+.tog::after { content: ''; position: absolute; width: 12px; height: 12px; background: var(--white); border-radius: 50%; top: 2px; left: 2px; transition: left .2s; }
+.tog.on::after { left: 14px; }
+.envio-input { width: 60px; font-family: 'DM Sans', sans-serif; font-size: 11px; color: var(--text); background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 3px 6px; outline: none; transition: all .2s; }
+.envio-input:focus { border-color: var(--rose); background: var(--white); }
+.envio-input:disabled { opacity: 0; pointer-events: none; width: 0; padding: 0; margin: 0; border: none; }
 
-/* ── EMPTY ── */
-.empty { text-align: center; padding: 2.5rem 1rem; color: var(--muted2); font-size: 13px; background: var(--white); border: 1.5px dashed var(--border); border-radius: 20px; }
-.empty-icon { font-size: 2rem; margin-bottom: .5rem; display: block; }
+/* COMISION TOGGLE */
+.com-tog { width: 28px; height: 16px; border-radius: 999px; border: none; cursor: pointer; position: relative; flex-shrink: 0; transition: background .2s; background: var(--border); }
+.com-tog.on { background: var(--lav2); }
+.com-tog::after { content: ''; position: absolute; width: 12px; height: 12px; background: var(--white); border-radius: 50%; top: 2px; left: 2px; transition: left .2s; }
+.com-tog.on::after { left: 14px; }
 
-/* ── PRODUCT BLOCK ── */
-.prod-block { margin-bottom: .75rem; }
-.prod-head { background: var(--white); border: 1px solid var(--border); border-radius: 16px 16px 0 0; padding: 10px 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.prod-head-name { flex: 1; font-size: 14px; font-weight: 500; color: var(--text); min-width: 80px; }
-.prod-price-raw { font-size: 12px; color: var(--muted); }
-.badge { font-size: 10px; border-radius: 999px; padding: 3px 8px; font-weight: 500; white-space: nowrap; }
-.badge-envio  { background: var(--rose3); color: var(--rose); border: 1px solid var(--rose2); }
-.badge-gratis { background: var(--bg2); color: var(--muted); border: 1px solid var(--border); }
-.badge-omitido{ background: var(--bg2); color: var(--muted); border: 1px solid var(--border); }
-.badge-jp     { background: var(--jpn2); color: var(--jpn3); border: 1px solid #b0d8f0; }
-.badge-mc     { background: var(--merc2); color: var(--merc3); border: 1px solid #f0d0a0; }
-.btn-toggle-envio { font-size: 10px; background: none; border: 1px solid var(--border); border-radius: 999px; padding: 3px 8px; color: var(--muted); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .2s; white-space: nowrap; }
-.btn-toggle-envio:hover { border-color: var(--rose); color: var(--rose); }
-.btn-del { background: none; border: none; color: var(--muted2); font-size: 18px; cursor: pointer; line-height: 1; padding: 0; transition: color .2s; }
+/* BTN DEL */
+.btn-del { background: none; border: none; color: var(--muted2); font-size: 16px; cursor: pointer; padding: 0 2px; transition: color .15s; line-height: 1; }
 .btn-del:hover { color: var(--danger); }
 
-/* ── PRICES GRID ── */
-.prices-wrap { border: 1px solid var(--border); border-top: none; border-radius: 0 0 16px 16px; overflow: hidden; }
-.prices-row  { display: grid; }
-.price-cell  { padding: 9px 12px; background: var(--bg3); border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 2px; }
-.price-cell:last-child { border-right: none; }
-.price-lbl   { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
-.price-val   { font-size: 15px; font-weight: 500; color: var(--text); }
-.price-note  { font-size: 10px; color: var(--muted2); }
-.pc-rose  { background: var(--rose3); } .pc-rose .price-val  { color: var(--rose); }
-.pc-lav   { background: var(--bg2);   } .pc-lav .price-val   { color: var(--lav2); }
-.pc-jpn   { background: var(--jpn2);  } .pc-jpn .price-val   { color: var(--jpn3); }
-.pc-merc  { background: var(--merc2); } .pc-merc .price-val  { color: var(--merc3); }
+/* SECTION LABEL EN TABLA */
+.tbl-section { background: var(--rose3); }
+.tbl-section td { padding: 4px 10px; font-size: 9px; font-weight: 500; color: var(--rose); text-transform: uppercase; letter-spacing: .07em; }
+.tbl-section.lav { background: var(--bg2); }
+.tbl-section.lav td { color: var(--lav2); }
 
-/* ── TOTALS ── */
-.totals-card { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 1.1rem; margin-bottom: .75rem; }
-.totals-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 1rem; }
-.total-cell  { background: var(--bg); border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 3px; }
-.total-lbl   { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
-.total-val   { font-size: 18px; font-weight: 500; color: var(--text); }
-.tc-rose { background: var(--rose3); } .tc-rose .total-val { color: var(--rose); }
-.tc-lav  { background: var(--bg2);   } .tc-lav .total-val  { color: var(--lav2); }
-.tc-jpn  { background: var(--jpn2);  } .tc-jpn .total-val  { color: var(--jpn3); }
-.tc-merc { background: var(--merc2); } .tc-merc .total-val { color: var(--merc3); }
+/* TOTALES */
+.totals-wrap { background: var(--white); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: .85rem; }
+.totals-header { padding: 8px 12px; background: var(--bg2); border-bottom: 1px solid var(--border); font-size: 10px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; display: flex; justify-content: space-between; align-items: center; }
+.totals-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+.tot-cell { padding: 10px 12px; border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 3px; }
+.tot-cell:last-child { border-right: none; }
+.tot-lbl { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.tot-val { font-size: 18px; font-weight: 500; color: var(--text); }
+.tot-cell.hl-rose { background: var(--rose3); } .tot-cell.hl-rose .tot-val { color: var(--rose); }
+.tot-cell.hl-lav  { background: var(--bg2);   } .tot-cell.hl-lav .tot-val  { color: var(--lav2); }
+.tot-cell.hl-jpn  { background: var(--jpn2);  } .tot-cell.hl-jpn .tot-val  { color: var(--jpn3); }
+.tot-cell.hl-merc { background: var(--merc2); } .tot-cell.hl-merc .tot-val { color: var(--merc3); }
 
-/* ── ACTIONS ── */
-.actions { display: flex; flex-direction: column; gap: 8px; padding-top: 1rem; border-top: 1px solid var(--border); }
-.btn-action { width: 100%; padding: 11px; border-radius: 12px; border: 1.5px solid var(--border); background: none; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all .2s; }
+/* EMPTY */
+.empty { text-align: center; padding: 2.5rem 1rem; color: var(--muted2); font-size: 13px; }
+
+/* ACCIONES */
+.actions { display: flex; gap: 8px; flex-wrap: wrap; padding: .85rem; border-top: 1px solid var(--border); align-items: center; }
+.btn-action { padding: 8px 14px; border-radius: 10px; border: 1.5px solid var(--border); background: none; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; transition: all .2s; }
 .btn-action:hover { border-color: var(--lav2); color: var(--lav2); background: var(--bg2); }
 .btn-action.danger { color: var(--muted); }
-.btn-action.danger:hover { border-color: var(--danger); color: var(--danger); background: #fff0f4; }
-.copy-ok { font-size: 12px; color: var(--success); text-align: center; min-height: 16px; }
+.btn-action.danger:hover { border-color: var(--danger); color: var(--danger); background: var(--rose3); }
+.copy-ok { font-size: 11px; color: var(--success); }
+
+@media (max-width: 600px) {
+  .inp-nombre { width: 140px; }
+  .inp-precio { width: 100px; }
+  .totals-grid { grid-template-columns: repeat(2,1fr); }
+  .tot-cell:nth-child(2) { border-right: none; }
+  .tot-cell:nth-child(3) { border-top: 1px solid var(--border); }
+}
 </style>
 </head>
 <body>
@@ -159,120 +155,100 @@ main { padding: 1rem 1rem 5rem; }
 <header>
   <div class="header-top">
     <div class="app-title">cotiza<em>₩¥</em></div>
-    <div class="rate-badge">
-      <span class="rdot loading" id="rdot"></span>
-      <span id="rstatus">cargando...</span>
-    </div>
+    <div class="rate-badge"><span class="rdot loading" id="rdot"></span><span id="rstatus">cargando...</span></div>
   </div>
-
   <div class="switcher">
     <button class="sw-btn active-kr" id="sw-kr" onclick="setMode('kr')">🇰🇷 Corea ₩</button>
     <button class="sw-btn" id="sw-jp" onclick="setMode('jp')">🇯🇵 Japón ¥</button>
     <button class="sw-btn" id="sw-mc" onclick="setMode('mc')">🛍️ Mercari</button>
   </div>
-
   <div class="rates-row" id="rates-kr">
-    <div class="rate-pill">
-      <label>1 ₩ = ? $ MXN</label>
-      <input type="number" id="rate-kr" value="0.01100" step="0.00001" min="0.00001" inputmode="decimal">
-    </div>
-    <div class="rate-pill">
-      <label>Envío Corea ₩</label>
-      <input type="number" id="envio-kr" value="3000" step="500" min="0" inputmode="numeric">
-    </div>
-    <div class="rate-pill">
-      <label>Spread tarjeta %</label>
-      <input type="number" id="spread" value="3" step="0.5" min="0" max="20" inputmode="decimal">
-    </div>
+    <div class="rate-pill"><label>1 ₩ = ? $ MXN</label><input type="number" id="rate-kr" value="0.01100" step="0.00001" min="0.00001" inputmode="decimal"></div>
+    <div class="rate-pill"><label>Spread tarjeta %</label><input type="number" id="spread-kr" value="3" step="0.5" min="0" max="20" inputmode="decimal"></div>
+    <div class="rate-pill"><label>Comisión Wise %</label><input type="number" id="wise-kr" value="7" step="0.5" min="0" max="30" inputmode="decimal"></div>
   </div>
-
   <div class="rates-row" id="rates-jp" style="display:none">
-    <div class="rate-pill">
-      <label>1 ¥ = ? $ MXN</label>
-      <input type="number" id="rate-jp" value="0.09500" step="0.00001" min="0.00001" inputmode="decimal">
-    </div>
-    <div class="rate-pill">
-      <label>Spread tarjeta %</label>
-      <input type="number" id="spread-jp" value="3" step="0.5" min="0" max="20" inputmode="decimal">
-    </div>
+    <div class="rate-pill"><label>1 ¥ = ? $ MXN</label><input type="number" id="rate-jp" value="0.09500" step="0.00001" min="0.00001" inputmode="decimal"></div>
+    <div class="rate-pill"><label>Spread tarjeta %</label><input type="number" id="spread-jp" value="3" step="0.5" min="0" max="20" inputmode="decimal"></div>
+    <div class="rate-pill"><label>Comisión Wise %</label><input type="number" id="wise-jp" value="7" step="0.5" min="0" max="30" inputmode="decimal"></div>
   </div>
-
   <div class="rates-row" id="rates-mc" style="display:none">
-    <div class="rate-pill" style="background:var(--merc2)">
-      <label>Tipo de cambio ¥ (0.125)</label>
-      <input type="number" id="rate-mc" value="0.125" step="0.001" min="0.001" inputmode="decimal">
-    </div>
-    <div class="rate-pill" style="background:var(--merc2)">
-      <label>Comisión mía (MXN)</label>
-      <input type="number" id="comision-mc" value="10" step="1" min="0" inputmode="numeric">
-    </div>
+    <div class="rate-pill" style="background:var(--merc2)"><label>Tipo de cambio ¥</label><input type="number" id="rate-mc" value="0.125" step="0.001" min="0.001" inputmode="decimal"></div>
+    <div class="rate-pill" style="background:var(--merc2)"><label>Mi comisión MXN</label><input type="number" id="comision-mc" value="10" step="1" min="0" inputmode="numeric"></div>
   </div>
 </header>
 
 <main>
-  <!-- INPUT COREA -->
-  <div class="input-card" id="input-kr">
-    <div class="card-title">agregar producto · corea</div>
-    <div class="field">
+  <!-- ADD BAR -->
+  <div class="add-bar" id="add-bar">
+    <div class="add-field">
       <label>nombre</label>
-      <input type="text" id="kr-nombre" placeholder="Ej: Shoulder Bag" autocomplete="off">
+      <input type="text" id="inp-nombre" class="inp-nombre" placeholder="Ej: Tshirt" autocomplete="off">
     </div>
-    <div class="field">
-      <label>precio en ₩</label>
-      <input type="number" id="kr-won" placeholder="59000" step="500" min="0" inputmode="numeric">
+    <div class="add-field">
+      <label id="inp-precio-label">precio en ₩</label>
+      <input type="number" id="inp-precio" class="inp-precio" placeholder="59000" step="500" min="0" inputmode="numeric">
     </div>
-    <button class="btn-agregar btn-kr" onclick="agregarKR()">+ agregar producto</button>
-    <p class="hint-text">productos &lt; ₩50,000 llevan el costo de envío automáticamente</p>
+    <button class="btn-add" id="btn-add" onclick="agregar()">+ agregar</button>
   </div>
 
-  <!-- INPUT JAPÓN -->
-  <div class="input-card" id="input-jp" style="display:none">
-    <div class="card-title">agregar producto · japón</div>
-    <div class="field">
-      <label>nombre</label>
-      <input type="text" id="jp-nombre" placeholder="Ej: Figura Sanrio" autocomplete="off" class="jp-focus">
+  <!-- TABLA -->
+  <div class="table-wrap" id="table-wrap" style="display:none">
+    <div class="table-scroll">
+      <table id="tabla">
+        <thead id="thead-kr">
+          <tr>
+            <th>producto</th>
+            <th>₩</th>
+            <th>envío ₩</th>
+            <th>wise</th>
+            <th class="th-price">×0.015</th>
+            <th class="th-price">cambio día</th>
+            <th class="th-price">nu/banamex</th>
+            <th class="th-price">wise +%</th>
+            <th></th>
+          </tr>
+        </thead>
+        <thead id="thead-jp" style="display:none">
+          <tr>
+            <th>producto</th>
+            <th>¥</th>
+            <th>envío ¥</th>
+            <th>wise</th>
+            <th class="th-price">×0.13</th>
+            <th class="th-price">cambio día</th>
+            <th class="th-price">nu/banamex</th>
+            <th class="th-price">wise +%</th>
+            <th></th>
+          </tr>
+        </thead>
+        <thead id="thead-mc" style="display:none">
+          <tr>
+            <th>producto</th>
+            <th>¥ mercari</th>
+            <th colspan="2"></th>
+            <th class="th-price" colspan="4">precio final MXN</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
     </div>
-    <div class="field">
-      <label>precio en ¥</label>
-      <input type="number" id="jp-yen" placeholder="3500" step="100" min="0" inputmode="numeric" class="jp-focus">
+    <div class="actions">
+      <button class="btn-action" onclick="copiarTexto()">📋 copiar resumen</button>
+      <button class="btn-action" onclick="copiarTabla()">📊 copiar tabla</button>
+      <button class="btn-action danger" onclick="limpiar()">✕ limpiar</button>
+      <span class="copy-ok" id="copy-ok"></span>
     </div>
-    <button class="btn-agregar btn-jp" onclick="agregarJP()">+ agregar producto</button>
-    <p class="hint-text">envío de ¥800 incluido automáticamente en todos los productos</p>
   </div>
 
-  <!-- INPUT MERCARI -->
-  <div class="input-card" id="input-mc" style="display:none">
-    <div class="card-title">agregar producto · mercari</div>
-    <div class="info-box">
-      <p>Fórmula: <code>(precio ¥ + 350) × 1.04 × [cambio] + $10 MXN comisión</code></p>
+  <!-- TOTALES -->
+  <div class="totals-wrap" id="totals-wrap" style="display:none">
+    <div class="totals-header">
+      <span>totales</span>
+      <span id="tot-count" style="color:var(--muted2)"></span>
     </div>
-    <div class="field">
-      <label>nombre</label>
-      <input type="text" id="mc-nombre" placeholder="Ej: Vestido floral" autocomplete="off" class="mc-focus">
-    </div>
-    <div class="field">
-      <label>precio en ¥ (como aparece en Mercari)</label>
-      <input type="number" id="mc-yen" placeholder="4800" step="100" min="0" inputmode="numeric" class="mc-focus">
-    </div>
-    <button class="btn-agregar btn-mc" onclick="agregarMC()">+ agregar producto</button>
-  </div>
-
-  <div class="section-label" id="section-lbl">mis productos</div>
-  <div id="prod-list">
-    <div class="empty"><span class="empty-icon">🛍️</span>agrega tu primer producto arriba</div>
-  </div>
-
-  <div id="totals-wrap" style="display:none">
-    <div class="section-label">totales</div>
-    <div class="totals-card">
-      <div class="totals-grid" id="totals-grid"></div>
-      <div class="actions">
-        <button class="btn-action" onclick="copiarTexto()">📋 copiar resumen</button>
-        <button class="btn-action" onclick="copiarTabla()">📊 copiar tabla (Excel / Sheets)</button>
-        <button class="btn-action danger" onclick="limpiar()">✕ limpiar todo</button>
-        <div class="copy-ok" id="copy-ok"></div>
-      </div>
-    </div>
+    <div class="totals-grid" id="totals-grid"></div>
   </div>
 </main>
 
@@ -287,8 +263,8 @@ async function fetchRates() {
     const res = await fetch('https://open.er-api.com/v6/latest/MXN');
     const data = await res.json();
     if (data.rates) {
-      if (data.rates.KRW) { rateKR = 1 / data.rates.KRW; document.getElementById('rate-kr').value = rateKR.toFixed(5); }
-      if (data.rates.JPY) { rateJP = 1 / data.rates.JPY; document.getElementById('rate-jp').value = rateJP.toFixed(5); }
+      if (data.rates.KRW) { rateKR = 1/data.rates.KRW; document.getElementById('rate-kr').value = rateKR.toFixed(5); }
+      if (data.rates.JPY) { rateJP = 1/data.rates.JPY; document.getElementById('rate-jp').value = rateJP.toFixed(5); }
       document.getElementById('rdot').className = 'rdot';
       document.getElementById('rstatus').textContent = 'cambio actualizado';
     } else throw 0;
@@ -298,262 +274,222 @@ async function fetchRates() {
   }
 }
 
-function setMode(m) {
-  modo = m;
-  ['kr','jp','mc'].forEach(x => {
-    document.getElementById('input-' + x).style.display = x === m ? 'block' : 'none';
-    document.getElementById('rates-' + x).style.display = x === m ? 'flex' : 'none';
-    const btn = document.getElementById('sw-' + x);
-    btn.className = 'sw-btn' + (x === m ? ' active-' + x : '');
-  });
-  render();
-}
-
-['rate-kr','rate-jp','rate-mc','envio-kr','spread','spread-jp','comision-mc'].forEach(id => {
+['rate-kr','rate-jp','rate-mc','spread-kr','spread-jp','wise-kr','wise-jp','comision-mc'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('input', render);
 });
 
-function getRateKR() { return parseFloat(document.getElementById('rate-kr').value) || rateKR; }
-function getEnvioKR() { return parseFloat(document.getElementById('envio-kr').value) || 0; }
-function getRateJP() { return parseFloat(document.getElementById('rate-jp').value) || rateJP; }
-function getSpreadKR() { return (parseFloat(document.getElementById('spread').value) || 3) / 100; }
-function getSpreadJP() { return (parseFloat(document.getElementById('spread-jp').value) || 3) / 100; }
-function getComMC() { return parseFloat(document.getElementById('comision-mc').value) || 10; }
-function getRateMC() { return parseFloat(document.getElementById('rate-mc').value) || 0.125; }
-function fmt(n) { return '$' + Math.round(n).toLocaleString('es-MX'); }
+function g(id) { return parseFloat(document.getElementById(id).value) || 0; }
+function getRateKR()  { return g('rate-kr') || rateKR; }
+function getRateJP()  { return g('rate-jp') || rateJP; }
+function getSpreadKR(){ return g('spread-kr')/100; }
+function getSpreadJP(){ return g('spread-jp')/100; }
+function getWiseKR()  { return 1 + g('wise-kr')/100; }
+function getWiseJP()  { return 1 + g('wise-jp')/100; }
+function getRateMC()  { return g('rate-mc') || 0.125; }
+function getComMC()   { return g('comision-mc') || 10; }
+function fmt(n)       { return '$'+Math.round(n).toLocaleString('es-MX'); }
 
-function calcKR(won, envio) {
-  const r = getRateKR(), sp = getSpreadKR();
-  const envioAmt = getEnvioKR();
-  const wonT = won + (envio ? envioAmt : 0);
-  return { formula: wonT * 0.015, dia: wonT * r, card: wonT * r * (1 + sp), wise: wonT * r * 1.07, directo: won * r, wonT, envioAmt };
+function calcKR(precio, envio) {
+  const r = getRateKR(), sp = getSpreadKR(), wi = getWiseKR();
+  const total = precio + envio;
+  return { formula: total*0.015, dia: total*r, card: total*r*(1+sp), wise: total*r*wi };
+}
+function calcJP(precio, envio) {
+  const r = getRateJP(), sp = getSpreadJP(), wi = getWiseJP();
+  const total = precio + envio;
+  return { formula: total*0.13, dia: total*r, card: total*r*(1+sp), wise: total*r*wi };
+}
+function calcMC(precio) {
+  return { result: ((precio+350)*1.04)*getRateMC()+getComMC() };
 }
 
-function calcJP(yen) {
-  const r = getRateJP(), sp = getSpreadJP();
-  const yenT = yen + 800;
-  return { formula: yenT * 0.13, dia: yenT * r, card: yenT * r * (1 + sp), wise: yenT * r * 1.07, yenT };
-}
-
-function calcMC(yen) {
-  const com = getComMC();
-  const r = getRateMC();
-  const result = ((yen + 350) * 1.04) * r + com;
-  return { result, r };
-}
-
-// ── AGREGAR ──
-function agregarKR() {
-  const nombre = document.getElementById('kr-nombre').value.trim() || 'Producto';
-  const won = parseInt(document.getElementById('kr-won').value);
-  if (!won || won <= 0) { document.getElementById('kr-won').focus(); return; }
-  productos.push({ tipo: 'kr', nombre, precio: won, envio: won < 50000 });
-  document.getElementById('kr-nombre').value = '';
-  document.getElementById('kr-won').value = '';
-  document.getElementById('kr-nombre').focus();
-  render();
-}
-
-function agregarJP() {
-  const nombre = document.getElementById('jp-nombre').value.trim() || 'Producto';
-  const yen = parseInt(document.getElementById('jp-yen').value);
-  if (!yen || yen <= 0) { document.getElementById('jp-yen').focus(); return; }
-  productos.push({ tipo: 'jp', nombre, precio: yen });
-  document.getElementById('jp-nombre').value = '';
-  document.getElementById('jp-yen').value = '';
-  document.getElementById('jp-nombre').focus();
-  render();
-}
-
-function agregarMC() {
-  const nombre = document.getElementById('mc-nombre').value.trim() || 'Producto';
-  const yen = parseInt(document.getElementById('mc-yen').value);
-  if (!yen || yen <= 0) { document.getElementById('mc-yen').focus(); return; }
-  productos.push({ tipo: 'mc', nombre, precio: yen });
-  document.getElementById('mc-nombre').value = '';
-  document.getElementById('mc-yen').value = '';
-  document.getElementById('mc-nombre').focus();
-  render();
-}
-
-['kr-won','jp-yen','mc-yen'].forEach(id => {
-  document.getElementById(id).addEventListener('keydown', e => {
-    if (e.key === 'Enter') { if(id==='kr-won') agregarKR(); else if(id==='jp-yen') agregarJP(); else agregarMC(); }
+function setMode(m) {
+  modo = m;
+  ['kr','jp','mc'].forEach(x => {
+    document.getElementById('rates-'+x).style.display = x===m?'flex':'none';
+    document.getElementById('sw-'+x).className = 'sw-btn'+(x===m?' active-'+x:'');
+    const th = document.getElementById('thead-'+x);
+    if (th) th.style.display = x===m?'':'none';
   });
-});
-['kr-nombre','jp-nombre','mc-nombre'].forEach((id, i) => {
-  const nexts = ['kr-won','jp-yen','mc-yen'];
-  document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById(nexts[i]).focus(); });
-});
+  document.getElementById('inp-precio-label').textContent = m==='kr'?'precio en ₩':'precio en ¥';
+  document.getElementById('btn-add').className = 'btn-add'+(m==='jp'?' jp':m==='mc'?' mc':'');
+  render();
+}
 
-function toggleEnvio(i) { productos[i].envio = !productos[i].envio; render(); }
-function eliminar(i) { productos.splice(i, 1); render(); }
-function limpiar() { if (confirm('¿Limpiar todos los productos?')) { productos = []; render(); } }
+function agregar() {
+  const nombre = document.getElementById('inp-nombre').value.trim() || 'Producto';
+  const precio = parseInt(document.getElementById('inp-precio').value);
+  if (!precio || precio <= 0) { document.getElementById('inp-precio').focus(); return; }
+  const envioDefault = modo==='kr' ? (precio<50000?3000:0) : modo==='jp' ? 800 : 0;
+  productos.push({ tipo: modo, nombre, precio, envio: envioDefault, envioOn: envioDefault>0, wiseOn: true });
+  document.getElementById('inp-nombre').value = '';
+  document.getElementById('inp-precio').value = '';
+  document.getElementById('inp-nombre').focus();
+  render();
+}
 
-// ── RENDER ──
+document.getElementById('inp-precio').addEventListener('keydown', e => { if(e.key==='Enter') agregar(); });
+document.getElementById('inp-nombre').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('inp-precio').focus(); });
+
+function toggleEnvio(i) {
+  productos[i].envioOn = !productos[i].envioOn;
+  render();
+}
+function setEnvio(i, val) {
+  productos[i].envio = parseFloat(val) || 0;
+  render();
+}
+function toggleWise(i) {
+  productos[i].wiseOn = !productos[i].wiseOn;
+  render();
+}
+function eliminar(i) {
+  productos.splice(i, 1);
+  render();
+}
+function limpiar() {
+  if(confirm('¿Limpiar todos los productos?')) { productos=[]; render(); }
+}
+
 function render() {
-  const list = document.getElementById('prod-list');
-  const wrap = document.getElementById('totals-wrap');
-  const visible = productos.filter(p => p.tipo === modo);
+  const visible = productos.filter(p => p.tipo===modo);
+  const tbody = document.getElementById('tbody');
+  const wrap = document.getElementById('table-wrap');
+  const totWrap = document.getElementById('totals-wrap');
 
-  if (visible.length === 0) {
-    list.innerHTML = '<div class="empty"><span class="empty-icon">🛍️</span>agrega tu primer producto arriba</div>';
+  if (visible.length===0) {
     wrap.style.display = 'none';
+    totWrap.style.display = 'none';
     return;
   }
+  wrap.style.display = 'block';
+  totWrap.style.display = 'block';
 
-  list.innerHTML = '';
-  let totals = {};
+  tbody.innerHTML = '';
+  let sums = { formula:0, dia:0, card:0, wise:0, mc:0 };
 
   visible.forEach(p => {
     const gi = productos.indexOf(p);
-    let headExtra = '', pricesHTML = '';
+    const tr = document.createElement('tr');
 
-    if (p.tipo === 'kr') {
-      const c = calcKR(p.precio, p.envio);
-      const esBarato = p.precio < 50000;
-      const badgeHTML = esBarato
-        ? (p.envio ? `<span class="badge badge-envio">+₩${c.envioAmt.toLocaleString()} envío</span>` : '<span class="badge badge-omitido">sin envío</span>')
-        : '<span class="badge badge-gratis">envío gratis</span>';
-      const togHTML = esBarato ? `<button class="btn-toggle-envio" onclick="toggleEnvio(${gi})">${p.envio?'− quitar':'+ envío'}</button>` : '';
-      headExtra = `<span class="prod-price-raw">₩${p.precio.toLocaleString()}</span>${badgeHTML}${togHTML}`;
-      const sp = document.getElementById('spread').value;
-      pricesHTML = `
-        <div class="prices-wrap">
-          <div class="prices-row" style="grid-template-columns:repeat(3,1fr)">
-            <div class="price-cell"><span class="price-lbl">×0.015</span><span class="price-val">${fmt(c.formula)}</span><span class="price-note">rápido</span></div>
-            <div class="price-cell"><span class="price-lbl">cambio día</span><span class="price-val">${fmt(c.dia)}</span><span class="price-note">sin comisión</span></div>
-            <div class="price-cell pc-lav"><span class="price-lbl">wise +7%</span><span class="price-val">${fmt(c.wise)}</span><span class="price-note">app</span></div>
+    if (p.tipo==='kr') {
+      const envioAmt = p.envioOn ? p.envio : 0;
+      const c = calcKR(p.precio, envioAmt);
+      sums.formula += c.formula; sums.dia += c.dia; sums.card += c.card;
+      if(p.wiseOn) sums.wise += c.wise;
+      tr.innerHTML = `
+        <td class="td-nombre">${p.nombre}</td>
+        <td class="td-precio">₩${p.precio.toLocaleString()}</td>
+        <td>
+          <div class="envio-cell">
+            <button class="tog${p.envioOn?' on':''}" onclick="toggleEnvio(${gi})"></button>
+            <input class="envio-input" type="number" value="${p.envio}" step="500" min="0"
+              ${p.envioOn?'':'disabled'}
+              onchange="setEnvio(${gi},this.value)" oninput="setEnvio(${gi},this.value)">
           </div>
-          <div class="prices-row" style="grid-template-columns:repeat(2,1fr);border-top:1px solid var(--border)">
-            <div class="price-cell"><span class="price-lbl">nu / banamex</span><span class="price-val">${fmt(c.card)}</span><span class="price-note">+${sp}%</span></div>
-            <div class="price-cell pc-rose"><span class="price-lbl">sin envío</span><span class="price-val">${fmt(c.directo)}</span><span class="price-note">₩${p.precio.toLocaleString()} base</span></div>
+        </td>
+        <td><button class="com-tog${p.wiseOn?' on':''}" onclick="toggleWise(${gi})"></button></td>
+        <td class="td-price">${fmt(c.formula)}</td>
+        <td class="td-price">${fmt(c.dia)}</td>
+        <td class="td-price">${fmt(c.card)}</td>
+        <td class="td-price lav">${p.wiseOn?fmt(c.wise):'—'}</td>
+        <td><button class="btn-del" onclick="eliminar(${gi})">×</button></td>`;
+    } else if (p.tipo==='jp') {
+      const envioAmt = p.envioOn ? p.envio : 0;
+      const c = calcJP(p.precio, envioAmt);
+      sums.formula += c.formula; sums.dia += c.dia; sums.card += c.card;
+      if(p.wiseOn) sums.wise += c.wise;
+      tr.innerHTML = `
+        <td class="td-nombre">${p.nombre}</td>
+        <td class="td-precio">¥${p.precio.toLocaleString()}</td>
+        <td>
+          <div class="envio-cell">
+            <button class="tog${p.envioOn?' on':''}" onclick="toggleEnvio(${gi})"></button>
+            <input class="envio-input" type="number" value="${p.envio}" step="100" min="0"
+              ${p.envioOn?'':'disabled'}
+              onchange="setEnvio(${gi},this.value)" oninput="setEnvio(${gi},this.value)">
           </div>
-        </div>`;
-      totals.formula  = (totals.formula  || 0) + c.formula;
-      totals.dia      = (totals.dia      || 0) + c.dia;
-      totals.card     = (totals.card     || 0) + c.card;
-      totals.wise     = (totals.wise     || 0) + c.wise;
-      totals.directo  = (totals.directo  || 0) + c.directo;
-    }
-
-    if (p.tipo === 'jp') {
-      const c = calcJP(p.precio);
-      const sp = document.getElementById('spread-jp').value;
-      headExtra = `<span class="prod-price-raw">¥${p.precio.toLocaleString()}</span><span class="badge badge-jp">+¥800 envío</span>`;
-      pricesHTML = `
-        <div class="prices-wrap">
-          <div class="prices-row" style="grid-template-columns:repeat(2,1fr)">
-            <div class="price-cell"><span class="price-lbl">×0.13</span><span class="price-val">${fmt(c.formula)}</span><span class="price-note">¥${c.yenT.toLocaleString()} × 0.13</span></div>
-            <div class="price-cell pc-jpn"><span class="price-lbl">cambio día</span><span class="price-val">${fmt(c.dia)}</span><span class="price-note">sin comisión</span></div>
-          </div>
-          <div class="prices-row" style="grid-template-columns:repeat(2,1fr);border-top:1px solid var(--border)">
-            <div class="price-cell"><span class="price-lbl">nu / banamex</span><span class="price-val">${fmt(c.card)}</span><span class="price-note">+${sp}%</span></div>
-            <div class="price-cell pc-lav"><span class="price-lbl">wise +7%</span><span class="price-val">${fmt(c.wise)}</span><span class="price-note">app</span></div>
-          </div>
-        </div>`;
-      totals.jFormula = (totals.jFormula || 0) + c.formula;
-      totals.jDia     = (totals.jDia     || 0) + c.dia;
-      totals.jCard    = (totals.jCard    || 0) + c.card;
-      totals.jWise    = (totals.jWise    || 0) + c.wise;
-    }
-
-    if (p.tipo === 'mc') {
+        </td>
+        <td><button class="com-tog${p.wiseOn?' on':''}" onclick="toggleWise(${gi})"></button></td>
+        <td class="td-price">${fmt(c.formula)}</td>
+        <td class="td-price">${fmt(c.dia)}</td>
+        <td class="td-price">${fmt(c.card)}</td>
+        <td class="td-price lav">${p.wiseOn?fmt(c.wise):'—'}</td>
+        <td><button class="btn-del" onclick="eliminar(${gi})">×</button></td>`;
+    } else {
       const c = calcMC(p.precio);
-      const com = getComMC();
-      headExtra = `<span class="prod-price-raw">¥${p.precio.toLocaleString()}</span><span class="badge badge-mc">Mercari</span>`;
-      pricesHTML = `
-        <div class="prices-wrap">
-          <div class="prices-row" style="grid-template-columns:1fr">
-            <div class="price-cell pc-merc" style="flex-direction:row;align-items:center;justify-content:space-between">
-              <div><span class="price-lbl">precio final MXN</span><span class="price-val">${fmt(c.result)}</span></div>
-              <div style="text-align:right"><span class="price-lbl">fórmula</span><span class="price-note" style="font-size:11px">(¥${p.precio.toLocaleString()}+350)×1.04×${c.r}+$${com}</span></div>
-            </div>
-          </div>
-        </div>`;
-      totals.mcTotal = (totals.mcTotal || 0) + c.result;
+      sums.mc += c.result;
+      tr.innerHTML = `
+        <td class="td-nombre">${p.nombre}</td>
+        <td class="td-precio">¥${p.precio.toLocaleString()}</td>
+        <td colspan="2" style="font-size:10px;color:var(--muted)">(¥${p.precio}+350)×1.04×${getRateMC()}+$${getComMC()}</td>
+        <td class="td-price rose" colspan="4">${fmt(c.result)}</td>
+        <td><button class="btn-del" onclick="eliminar(${gi})">×</button></td>`;
     }
-
-    const block = document.createElement('div');
-    block.className = 'prod-block';
-    block.innerHTML = `
-      <div class="prod-head">
-        <span class="prod-head-name">${p.nombre}</span>
-        ${headExtra}
-        <button class="btn-del" onclick="eliminar(${gi})">×</button>
-      </div>
-      ${pricesHTML}
-    `;
-    list.appendChild(block);
+    tbody.appendChild(tr);
   });
 
-  // ── TOTALES ──
-  wrap.style.display = 'block';
+  // TOTALES
   const tg = document.getElementById('totals-grid');
-  tg.innerHTML = '';
-  const sp = document.getElementById('spread').value;
-  const spJP = document.getElementById('spread-jp').value;
-
-  if (modo === 'kr') {
+  document.getElementById('tot-count').textContent = visible.length + ' producto' + (visible.length!==1?'s':'');
+  if (modo==='mc') {
+    tg.style.gridTemplateColumns = '1fr';
+    tg.innerHTML = `<div class="tot-cell hl-merc"><span class="tot-lbl">total mercari</span><span class="tot-val">${fmt(sums.mc)}</span></div>`;
+  } else {
+    tg.style.gridTemplateColumns = 'repeat(4,1fr)';
+    const lbl = modo==='kr'?'×0.015':'×0.13';
     tg.innerHTML = `
-      <div class="total-cell"><span class="total-lbl">×0.015</span><span class="total-val">${fmt(totals.formula||0)}</span></div>
-      <div class="total-cell"><span class="total-lbl">cambio del día</span><span class="total-val">${fmt(totals.dia||0)}</span></div>
-      <div class="total-cell"><span class="total-lbl">nu / banamex</span><span class="total-val">${fmt(totals.card||0)}</span></div>
-      <div class="total-cell tc-lav"><span class="total-lbl">wise +7%</span><span class="total-val">${fmt(totals.wise||0)}</span></div>
-      <div class="total-cell tc-rose" style="grid-column:span 2"><span class="total-lbl">sin envío (base)</span><span class="total-val">${fmt(totals.directo||0)}</span></div>`;
-  } else if (modo === 'jp') {
-    tg.innerHTML = `
-      <div class="total-cell"><span class="total-lbl">×0.13</span><span class="total-val">${fmt(totals.jFormula||0)}</span></div>
-      <div class="total-cell tc-jpn"><span class="total-lbl">cambio del día</span><span class="total-val">${fmt(totals.jDia||0)}</span></div>
-      <div class="total-cell"><span class="total-lbl">nu / banamex</span><span class="total-val">${fmt(totals.jCard||0)}</span></div>
-      <div class="total-cell tc-lav"><span class="total-lbl">wise +7%</span><span class="total-val">${fmt(totals.jWise||0)}</span></div>`;
-  } else if (modo === 'mc') {
-    tg.innerHTML = `
-      <div class="total-cell tc-merc" style="grid-column:span 2"><span class="total-lbl">total mercari MXN</span><span class="total-val">${fmt(totals.mcTotal||0)}</span></div>`;
+      <div class="tot-cell"><span class="tot-lbl">${lbl}</span><span class="tot-val">${fmt(sums.formula)}</span></div>
+      <div class="tot-cell ${modo==='jp'?'hl-jpn':''}"><span class="tot-lbl">cambio día</span><span class="tot-val">${fmt(sums.dia)}</span></div>
+      <div class="tot-cell"><span class="tot-lbl">nu / banamex</span><span class="tot-val">${fmt(sums.card)}</span></div>
+      <div class="tot-cell hl-lav"><span class="tot-lbl">wise +${modo==='kr'?g('wise-kr'):g('wise-jp')}%</span><span class="tot-val">${fmt(sums.wise)}</span></div>`;
   }
 }
 
-// ── COPIAR ──
-function ok(msg) { const el = document.getElementById('copy-ok'); el.textContent = msg; setTimeout(() => el.textContent = '', 2500); }
+function ok(msg) { const el=document.getElementById('copy-ok'); el.textContent=msg; setTimeout(()=>el.textContent='',2500); }
 
 function copiarTexto() {
-  const visible = productos.filter(p => p.tipo === modo);
-  if (!visible.length) return;
-  let txt = modo === 'kr' ? '🇰🇷 COTIZACIÓN WON → MXN\n' : modo === 'jp' ? '🇯🇵 COTIZACIÓN YEN → MXN\n' : '🛍️ COTIZACIÓN MERCARI → MXN\n';
-  txt += '─'.repeat(36) + '\n\n';
+  const visible = productos.filter(p=>p.tipo===modo);
+  if(!visible.length) return;
+  let txt = modo==='kr'?'🇰🇷 COTIZACIÓN WON → MXN\n':modo==='jp'?'🇯🇵 COTIZACIÓN YEN → MXN\n':'🛍️ MERCARI → MXN\n';
+  txt += '─'.repeat(36)+'\n\n';
   visible.forEach(p => {
-    if (p.tipo === 'kr') {
-      const c = calcKR(p.precio, p.envio);
-      txt += `▸ ${p.nombre}  ₩${p.precio.toLocaleString()}${p.envio?' (+₩'+c.envioAmt.toLocaleString()+' envío)':''}\n`;
-      txt += `  ×0.015      ${fmt(c.formula)}\n  Cambio día  ${fmt(c.dia)}\n  Nu/Banamex  ${fmt(c.card)}\n  Wise +7%    ${fmt(c.wise)}\n  Sin envío   ${fmt(c.directo)}\n\n`;
-    } else if (p.tipo === 'jp') {
-      const c = calcJP(p.precio);
-      txt += `▸ ${p.nombre}  ¥${p.precio.toLocaleString()} (+¥800 envío)\n`;
-      txt += `  ×0.13       ${fmt(c.formula)}\n  Cambio día  ${fmt(c.dia)}\n  Nu/Banamex  ${fmt(c.card)}\n  Wise +7%    ${fmt(c.wise)}\n\n`;
+    if(p.tipo==='mc') {
+      const c=calcMC(p.precio);
+      txt += `▸ ${p.nombre}  ¥${p.precio.toLocaleString()}\n  Final  ${fmt(c.result)}\n\n`;
     } else {
-      const c = calcMC(p.precio);
-      txt += `▸ ${p.nombre}  ¥${p.precio.toLocaleString()} (Mercari)\n  Precio MXN  ${fmt(c.result)}\n\n`;
+      const envioAmt = p.envioOn?p.envio:0;
+      const c = p.tipo==='kr'?calcKR(p.precio,envioAmt):calcJP(p.precio,envioAmt);
+      const sym = p.tipo==='kr'?'₩':'¥';
+      txt += `▸ ${p.nombre}  ${sym}${p.precio.toLocaleString()}${envioAmt?' (+'+sym+envioAmt.toLocaleString()+' envío)':''}\n`;
+      txt += `  ${p.tipo==='kr'?'×0.015':'×0.13 '}  ${fmt(c.formula)}\n`;
+      txt += `  Cambio día  ${fmt(c.dia)}\n`;
+      txt += `  Nu/Banamex  ${fmt(c.card)}\n`;
+      txt += `  Wise        ${p.wiseOn?fmt(c.wise):'—'}\n\n`;
     }
   });
-  navigator.clipboard.writeText(txt).then(() => ok('✓ resumen copiado'));
+  navigator.clipboard.writeText(txt).then(()=>ok('✓ resumen copiado'));
 }
 
 function copiarTabla() {
-  const visible = productos.filter(p => p.tipo === modo);
-  if (!visible.length) return;
+  const visible = productos.filter(p=>p.tipo===modo);
+  if(!visible.length) return;
   let txt = '';
-  if (modo === 'kr') {
-    txt = 'Producto\t₩\tEnvío\t×0.015\tCambio día\tNu/Banamex\tWise+7%\tSin envío\n';
-    visible.forEach(p => { const c = calcKR(p.precio, p.envio); txt += `${p.nombre}\t${p.precio}\t${p.envio?'₩'+c.envioAmt.toLocaleString():'—'}\t${fmt(c.formula)}\t${fmt(c.dia)}\t${fmt(c.card)}\t${fmt(c.wise)}\t${fmt(c.directo)}\n`; });
-  } else if (modo === 'jp') {
-    txt = 'Producto\t¥\t×0.13\tCambio día\tNu/Banamex\tWise+7%\n';
-    visible.forEach(p => { const c = calcJP(p.precio); txt += `${p.nombre}\t${p.precio}\t${fmt(c.formula)}\t${fmt(c.dia)}\t${fmt(c.card)}\t${fmt(c.wise)}\n`; });
-  } else {
+  if(modo==='mc') {
     txt = 'Producto\t¥ Mercari\tPrecio MXN\n';
-    visible.forEach(p => { const c = calcMC(p.precio); txt += `${p.nombre}\t${p.precio}\t${fmt(c.result)}\n`; });
+    visible.forEach(p=>{ const c=calcMC(p.precio); txt+=`${p.nombre}\t${p.precio}\t${fmt(c.result)}\n`; });
+  } else {
+    const lbl=modo==='kr'?'×0.015':'×0.13';
+    txt=`Producto\tPrecio\tEnvío\t${lbl}\tCambio día\tNu/Banamex\tWise\n`;
+    visible.forEach(p=>{
+      const envioAmt=p.envioOn?p.envio:0;
+      const c=p.tipo==='kr'?calcKR(p.precio,envioAmt):calcJP(p.precio,envioAmt);
+      const sym=p.tipo==='kr'?'₩':'¥';
+      txt+=`${p.nombre}\t${sym}${p.precio}\t${envioAmt?sym+envioAmt:'—'}\t${fmt(c.formula)}\t${fmt(c.dia)}\t${fmt(c.card)}\t${p.wiseOn?fmt(c.wise):'—'}\n`;
+    });
   }
-  navigator.clipboard.writeText(txt).then(() => ok('✓ tabla copiada — pega en Excel o Sheets'));
+  navigator.clipboard.writeText(txt).then(()=>ok('✓ tabla copiada'));
 }
 
 fetchRates();
