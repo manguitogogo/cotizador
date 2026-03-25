@@ -171,13 +171,13 @@ tbody td { padding: 6px 10px; vertical-align: middle; }
     <div class="rate-pill"><label>1 ₩ = ? $ MXN</label><input type="number" id="rate-kr" value="0.01100" step="0.00001" min="0.00001" inputmode="decimal"></div>
     <div class="rate-pill"><label>1 USD = ? $ MXN</label><input type="number" id="usd-mxn" value="17.50" step="0.01" min="1" inputmode="decimal"></div>
     <div class="rate-pill"><label>Spread tarjeta %</label><input type="number" id="spread-kr" value="3" step="0.5" min="0" max="20" inputmode="decimal"></div>
-    <div class="rate-pill"><label>Wise + banco %</label><input type="number" id="wise-kr" value="6" step="0.5" min="0" max="30" inputmode="decimal"></div>
+    <div class="rate-pill"><label>Wise + banco %</label><input type="number" id="wise-kr" value="15" step="0.5" min="0" max="30" inputmode="decimal"></div>
   </div>
   <div class="rates-row" id="rates-jp" style="display:none">
     <div class="rate-pill"><label>1 ¥ = ? $ MXN</label><input type="number" id="rate-jp" value="0.09500" step="0.00001" min="0.00001" inputmode="decimal"></div>
     <div class="rate-pill"><label>1 USD = ? $ MXN</label><input type="number" id="usd-mxn-jp" value="17.50" step="0.01" min="1" inputmode="decimal"></div>
     <div class="rate-pill"><label>Spread tarjeta %</label><input type="number" id="spread-jp" value="3" step="0.5" min="0" max="20" inputmode="decimal"></div>
-    <div class="rate-pill"><label>Wise + banco %</label><input type="number" id="wise-jp" value="6" step="0.5" min="0" max="30" inputmode="decimal"></div>
+    <div class="rate-pill"><label>Wise + banco %</label><input type="number" id="wise-jp" value="15" step="0.5" min="0" max="30" inputmode="decimal"></div>
   </div>
   <div class="rates-row" id="rates-mc" style="display:none">
     <div class="rate-pill" style="background:var(--merc2)"><label>Tipo de cambio ¥</label><input type="number" id="rate-mc" value="0.125" step="0.001" min="0.001" inputmode="decimal"></div>
@@ -244,6 +244,9 @@ tbody td { padding: 6px 10px; vertical-align: middle; }
     <div class="actions">
       <button class="btn-action" onclick="copiarTexto()">📋 copiar resumen</button>
       <button class="btn-action" onclick="copiarTabla()">📊 copiar tabla</button>
+      <button class="btn-action" onclick="exportar()">💾 guardar lista</button>
+      <button class="btn-action" onclick="document.getElementById('importar-input').click()">📂 cargar lista</button>
+      <input type="file" id="importar-input" accept=".json" style="display:none" onchange="importar(this)">
       <button class="btn-action danger" onclick="limpiar()">✕ limpiar</button>
       <span class="copy-ok" id="copy-ok"></span>
     </div>
@@ -472,6 +475,61 @@ function render() {
 
 function ok(msg) { const el=document.getElementById('copy-ok'); el.textContent=msg; setTimeout(()=>el.textContent='',2500); }
 
+function exportar() {
+  const datos = {
+    version: 1,
+    fecha: new Date().toLocaleDateString('es-MX'),
+    config: {
+      rateKr: document.getElementById('rate-kr').value,
+      rateJp: document.getElementById('rate-jp').value,
+      usdMxn: document.getElementById('usd-mxn').value,
+      spreadKr: document.getElementById('spread-kr').value,
+      spreadJp: document.getElementById('spread-jp').value,
+      wiseKr: document.getElementById('wise-kr').value,
+      wiseJp: document.getElementById('wise-jp').value,
+      rateMc: document.getElementById('rate-mc').value,
+      comisionMc: document.getElementById('comision-mc').value,
+    },
+    productos
+  };
+  const blob = new Blob([JSON.stringify(datos, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'cotizacion-' + new Date().toLocaleDateString('es-MX').replace(/\//g,'-') + '.json';
+  a.click();
+  ok('✓ lista descargada');
+}
+
+function importar(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const datos = JSON.parse(e.target.result);
+      if (datos.productos) {
+        productos = datos.productos;
+        if (datos.config) {
+          const c = datos.config;
+          if (c.rateKr) document.getElementById('rate-kr').value = c.rateKr;
+          if (c.rateJp) document.getElementById('rate-jp').value = c.rateJp;
+          if (c.usdMxn) { document.getElementById('usd-mxn').value = c.usdMxn; document.getElementById('usd-mxn-jp').value = c.usdMxn; }
+          if (c.spreadKr) document.getElementById('spread-kr').value = c.spreadKr;
+          if (c.spreadJp) document.getElementById('spread-jp').value = c.spreadJp;
+          if (c.wiseKr) document.getElementById('wise-kr').value = c.wiseKr;
+          if (c.wiseJp) document.getElementById('wise-jp').value = c.wiseJp;
+          if (c.rateMc) document.getElementById('rate-mc').value = c.rateMc;
+          if (c.comisionMc) document.getElementById('comision-mc').value = c.comisionMc;
+        }
+        render();
+        ok('✓ lista cargada · ' + (datos.fecha || ''));
+      }
+    } catch { ok('✗ archivo inválido'); }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
 function copiarTexto() {
   const visible = productos.filter(p=>p.tipo===modo);
   if(!visible.length) return;
@@ -513,6 +571,58 @@ function copiarTabla() {
     });
   }
   navigator.clipboard.writeText(txt).then(()=>ok('✓ tabla copiada'));
+}
+
+function exportar() {
+  const data = {
+    productos,
+    rates: {
+      kr: document.getElementById('rate-kr').value,
+      jp: document.getElementById('rate-jp').value,
+      usdMxn: document.getElementById('usd-mxn').value,
+      spreadKr: document.getElementById('spread-kr').value,
+      spreadJp: document.getElementById('spread-jp').value,
+      wiseKr: document.getElementById('wise-kr').value,
+      wiseJp: document.getElementById('wise-jp').value,
+      rateMc: document.getElementById('rate-mc').value,
+      comisionMc: document.getElementById('comision-mc').value
+    }
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  const fecha = new Date().toISOString().slice(0,10);
+  a.download = 'cotizacion-' + fecha + '.json';
+  a.click();
+  ok('✓ lista guardada');
+}
+
+function importar(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.productos) productos = data.productos;
+      if (data.rates) {
+        const r = data.rates;
+        if (r.kr) document.getElementById('rate-kr').value = r.kr;
+        if (r.jp) document.getElementById('rate-jp').value = r.jp;
+        if (r.usdMxn) { document.getElementById('usd-mxn').value = r.usdMxn; document.getElementById('usd-mxn-jp').value = r.usdMxn; }
+        if (r.spreadKr) document.getElementById('spread-kr').value = r.spreadKr;
+        if (r.spreadJp) document.getElementById('spread-jp').value = r.spreadJp;
+        if (r.wiseKr) document.getElementById('wise-kr').value = r.wiseKr;
+        if (r.wiseJp) document.getElementById('wise-jp').value = r.wiseJp;
+        if (r.rateMc) document.getElementById('rate-mc').value = r.rateMc;
+        if (r.comisionMc) document.getElementById('comision-mc').value = r.comisionMc;
+      }
+      render();
+      ok('✓ lista cargada — ' + productos.length + ' productos');
+    } catch { ok('✗ archivo inválido'); }
+  };
+  reader.readAsText(file);
+  input.value = '';
 }
 
 fetchRates();
