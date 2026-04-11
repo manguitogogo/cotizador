@@ -63,6 +63,10 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
 .div-result-table td:first-child { text-align: left; font-weight: 500; }
 .div-result-table tr:last-child td { border-bottom: none; }
 .div-result-table .col-wise { color: var(--lav2); font-weight: 600; }
+.div-copy-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; align-items: center; }
+.btn-div-copy { padding: 5px 10px; border-radius: 8px; border: 1.5px solid var(--border); background: none; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; cursor: pointer; transition: all .2s; }
+.btn-div-copy:hover { border-color: var(--lav2); color: var(--lav2); background: var(--bg2); }
+.btn-div-copy-wise { border-color: var(--lav); color: var(--lav3); }
 
 /* HEADER */
 header { background: var(--white); border-bottom: 1px solid var(--border); padding: .9rem 1.25rem .7rem; position: sticky; top: 0; z-index: 20; }
@@ -311,6 +315,14 @@ tbody td { padding: 6px 10px; vertical-align: middle; }
     </div>
     <div id="div-result-wrap" style="display:none">
       <table class="div-result-table" id="div-result-table"></table>
+      <div class="div-copy-row" id="div-copy-row" style="display:none">
+        <span style="font-size:11px;color:var(--muted);align-self:center">copiar:</span>
+        <button class="btn-div-copy" onclick="copiarDivision('formula')">×0.015</button>
+        <button class="btn-div-copy" onclick="copiarDivision('dia')">día</button>
+        <button class="btn-div-copy" onclick="copiarDivision('card')">nu/ban</button>
+        <button class="btn-div-copy btn-div-copy-wise" onclick="copiarDivision('wise')">wise 💜</button>
+        <span class="copy-ok" id="div-copy-ok"></span>
+      </div>
     </div>
   </div>
 </main>
@@ -401,7 +413,7 @@ function agregar() {
   const nombre = document.getElementById('inp-nombre').value.trim() || 'Producto';
   const precio = parseInt(document.getElementById('inp-precio').value);
   if (!precio || precio <= 0) { document.getElementById('inp-precio').focus(); return; }
-  const envioDefault = modo==='kr' ? (precio<50000?3000:0) : modo==='jp' ? 800 : 0;
+  const envioDefault = modo==='kr' ? 3000 : modo==='jp' ? 800 : 0;
   productos.push({ tipo: modo, nombre, precio, envio: envioDefault, envioOn: envioDefault>0, wiseOn: true });
   document.getElementById('inp-nombre').value = '';
   document.getElementById('inp-precio').value = '';
@@ -428,7 +440,7 @@ function setPrecio(i, val) {
   const v = parseInt(val);
   if (!v || v <= 0) { eliminar(i); return; }
   productos[i].precio = v;
-  if (productos[i].tipo === 'kr') { productos[i].envio = v < 50000 ? 3000 : 0; productos[i].envioOn = v < 50000; }
+  if (productos[i].tipo === 'kr') { productos[i].envio = 3000; productos[i].envioOn = true; }
   render();
 }
 function toggleWise(i) {
@@ -746,13 +758,14 @@ function getDivPcts() {
 function renderDivResult() {
   const wrap = document.getElementById('div-result-wrap');
   const tbl = document.getElementById('div-result-table');
+  const copyRow = document.getElementById('div-copy-row');
   if(!_lastSums || divMode==='no') { wrap.style.display='none'; return; }
   const sums = _lastSums;
   if(modo==='mc') { wrap.style.display='none'; return; }
 
   wrap.style.display = 'block';
+  copyRow.style.display = 'flex';
   const lbl = modo==='kr' ? '×0.015' : '×0.13';
-  // Build header
   let html = `<thead><tr><th>persona</th><th>${lbl}</th><th>día</th><th>nu/ban</th><th class="col-wise">wise</th></tr></thead><tbody>`;
 
   if(divMode==='igual') {
@@ -782,6 +795,37 @@ function renderDivResult() {
   }
   html += '</tbody>';
   tbl.innerHTML = html;
+}
+
+function copiarDivision(col) {
+  if(!_lastSums || divMode==='no') return;
+  const sums = _lastSums;
+  const colNombre = col==='formula'?(modo==='kr'?'×0.015':'×0.13'):col==='dia'?'Cambio día':col==='card'?'Nu/Banamex':'Wise';
+  let txt = '';
+
+  if(divMode==='igual') {
+    const n = parseInt(document.getElementById('d-n-personas').value)||7;
+    txt = `÷${n} · ${colNombre}\n`;
+    const val = col==='wise'?(sums.wise>0?sums.wise/n:null):sums[col]/n;
+    for(let j=1;j<=n;j++){
+      txt += `Persona ${j}: ${val!==null?fmt(val)+'+ cargos':'—'}\n`;
+    }
+  } else if(divMode==='pct') {
+    const pcts = getDivPcts();
+    const sumPct = pcts.reduce((a,b)=>a+b,0)||100;
+    txt = `${colNombre}\n`;
+    MIEMBROS.forEach((m,i) => {
+      const pct = pcts[i];
+      const base = col==='wise' ? (sums.wise>0?sums.wise*(pct/sumPct):null) : sums[col]*(pct/sumPct);
+      txt += `${m.emoji} ${m.nombre}: ${base!==null?fmt(base)+'+cargos':'—'}\n`;
+    });
+  }
+
+  navigator.clipboard.writeText(txt.trim()).then(()=>{
+    const el = document.getElementById('div-copy-ok');
+    el.textContent = '✓ copiado';
+    setTimeout(()=>el.textContent='', 2000);
+  });
 }
 
 fetchRates();
